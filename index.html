@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f7f8f2" />
+  <title>研有期 · 考研学习工作台</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-row">
+        <div class="brand-mark" aria-hidden="true"></div>
+        <div>
+          <h1>研有期</h1>
+          <p>一座会开花的考研工作台</p>
+        </div>
+        <button class="icon-button sidebar-close" id="sidebarClose" aria-label="关闭菜单">×</button>
+      </div>
+
+      <div class="exam-card">
+        <div class="exam-card-top">
+          <span>我的备考方向</span>
+          <span class="live-dot" id="stageLabel">按自己的节奏</span>
+        </div>
+        <div class="countdown"><strong id="countdownDays">--</strong><span>天</span></div>
+        <div class="countdown-track"><i id="countdownProgress"></i></div>
+        <button class="text-button" id="editExamDate">设置我的备考目标 →</button>
+      </div>
+
+      <nav class="nav-list" aria-label="主要导航">
+        <button class="nav-item active" data-page="plan" title="每日计划"><span class="nav-icon" data-icon="plan"></span><span class="nav-label">每日计划</span><i></i></button>
+        <button class="nav-item" data-page="review" title="内容复盘"><span class="nav-icon" data-icon="review"></span><span class="nav-label">内容复盘</span><i></i></button>
+        <button class="nav-item" data-page="memo" title="备忘录"><span class="nav-icon" data-icon="memo"></span><span class="nav-label">备忘录</span><i></i></button>
+        <button class="nav-item" data-page="english" title="英语学习"><span class="nav-icon" data-icon="english"></span><span class="nav-label">英语学习</span><i></i></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="focus-quote">
+          <span>今日寄语</span>
+          <p id="sidebarQuote">花开有期，奔赴亦有期。</p>
+        </div>
+        <div class="profile">
+          <div class="avatar" aria-hidden="true">期</div>
+          <div><strong>我的生长计划</strong><small id="profileTarget">每个人都有自己的花期</small></div>
+          <button class="icon-button" id="settingsButton" aria-label="打开目标与数据设置" data-icon="settings"></button>
+        </div>
+        <button class="sidebar-collapse" id="collapseSidebar" aria-label="折叠侧边栏" aria-expanded="true">‹ <span>收起侧栏</span></button>
+      </div>
+    </aside>
+
+    <div class="sidebar-mask" id="sidebarMask"></div>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menuButton" aria-label="打开菜单">☰</button>
+        <div class="date-block">
+          <span id="todayWeek">星期四</span>
+          <strong id="todayDate">2026年8月20日</strong>
+        </div>
+        <div class="top-actions">
+          <span class="streak-pill" title="连续完成全部计划的天数">已认真度过 <strong id="streakDays">0</strong> 天</span>
+          <button class="secondary-button theme-picker" id="themePicker" aria-haspopup="dialog"><span aria-hidden="true">✳</span> <span id="currentTheme">鸢尾 · 致远</span></button>
+          <button class="icon-button" id="themeToggle" aria-label="切换深色模式">☾</button>
+        </div>
+      </header>
+
+      <section class="page active" id="page-plan">
+        <div class="welcome-banner">
+          <div class="welcome-copy">
+            <p class="eyebrow">YAN YOU QI · STUDY SPACE</p>
+            <h2><span id="greeting">你好</span>，今天也自有花期。</h2>
+            <p class="subtext daily-quote" id="dailyQuote">花开有期，奔赴亦有期。</p>
+            <span class="theme-caption" id="themeCaption">IRIS · 鸢尾 / 致远</span>
+          </div>
+            <div class="botanical-art" id="botanicalArt"></div>
+        </div>
+        <div class="summary-grid">
+          <div class="summary-card"><span class="summary-label">我的花期 · 距离初试</span><strong id="summaryCountdown">未设置</strong><small id="examSummary">为未来定一个日期</small></div>
+          <div class="summary-card"><span class="summary-label">当日学习目标</span><strong id="summaryGoal">0 <em>h</em></strong><small id="summaryGoalHint">从一项小计划开始</small></div>
+          <div class="summary-card"><span class="summary-label">实际学习时长</span><strong id="summaryActual">0 <em>h</em></strong><small>根据任务中记录的实际用时</small></div>
+          <div class="summary-card"><span class="summary-label">当日待办</span><strong id="summaryTodo">0 <em>项</em></strong><small id="summaryCompleted">为今天留一点生长的空间</small></div>
+        </div>
+        <div class="section-heading"><div><span class="mini-label">MY DAILY PLANNER</span><h3>把日子，过成自己的节奏</h3></div><div class="date-tools"><button class="secondary-button" id="jumpToday">今天</button><input type="date" id="dateInput" aria-label="选择计划日期"></div></div>
+        <div class="date-strip-wrap">
+          <button class="date-arrow" id="datePrev" aria-label="上一周">‹</button>
+          <div class="date-strip" id="dateStrip"></div>
+          <button class="date-arrow" id="dateNext" aria-label="下一周">›</button>
+        </div>
+
+        <div class="dashboard-grid">
+          <section class="panel task-panel">
+            <div class="panel-head">
+              <div><h3>学习清单</h3><p id="taskSummary">按自己的节奏安排一天</p></div>
+              <button class="primary-button" id="addTaskTop">＋ 新增任务</button>
+            </div>
+            <div class="task-toolbar"><button class="text-button" id="manageSubjects">管理我的科目 ↗</button>
+              <div class="filter-tabs">
+                <button class="active" data-filter="all">全部</button>
+                <button data-filter="todo">待完成</button>
+                <button data-filter="done">已完成</button>
+              </div>
+            </div>
+            <div class="onboarding-card" id="onboardingCard" hidden><span class="mini-label">A FRESH START</span><h4>你的计划，由你书写。</h4><p>从空白开始，或借一份通用模板起步。每一项都可以自由修改。</p><div class="onboarding-actions"><button class="secondary-button" id="startBlank">从空白开始</button><button class="template-button" id="useTemplate">使用通用备考模板 ↗</button></div></div>
+            <div class="task-list" id="taskList"></div>
+            <button class="add-inline" id="addTaskInline">＋ 添加一项今日任务</button>
+          </section>
+
+          <aside class="dashboard-aside">
+            <section class="panel progress-panel">
+              <div class="progress-ring" id="progressRing"><div><strong id="progressPercent">0%</strong><span>今日进度</span></div></div>
+              <div class="progress-copy">
+                <span class="mini-label">COMPLETION</span>
+                <h3 id="progressTitle">开始今天的学习吧</h3>
+                <p id="progressDetail">0 / 0 项已完成</p>
+              </div>
+            </section>
+
+            <section class="panel subject-panel">
+              <div class="panel-head"><div><h3>时间的去向</h3><p>按任务时长统计 · <span id="chartModeLabel">计划</span></p></div><select id="chartMode" aria-label="选择时长统计方式"><option value="planned">计划时长</option><option value="actual">实际时长</option></select></div>
+              <div id="subjectBars"></div>
+              <p class="chart-detail" id="chartDetail" aria-live="polite">轻触图例，查看时间分配</p>
+            </section>
+
+            <section class="panel mini-memo-panel">
+              <div class="panel-head"><div><h3>随手记</h3><p>记下此刻，稍后整理</p></div><button class="text-button" data-jump="memo">查看全部</button></div>
+              <textarea id="quickMemo" aria-label="当日随手记" placeholder="一个待解的问题，或一件值得记住的小事……" maxlength="160"></textarea>
+              <div class="save-hint" id="memoSaveHint">输入内容后自动保存</div>
+            </section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-review">
+        <div class="hero-row">
+          <div><p class="eyebrow">DAILY REVIEW</p><h2>把今天的努力，沉淀成明天的底气。</h2><p class="subtext">复盘不是责备，是为了找到更适合自己的节奏。</p></div>
+          <button class="secondary-button" id="copyReview">复制今日复盘</button>
+        </div>
+        <div class="review-layout">
+          <section class="panel review-main">
+            <div class="panel-head"><div><h3>今日状态</h3><p>轻点一个最接近的感受</p></div><span class="review-date-label"></span></div>
+            <div class="mood-row" id="moodRow">
+              <button data-mood="低迷"><span>😮‍💨</span>低迷</button><button data-mood="普通"><span>😐</span>普通</button><button data-mood="不错"><span>🙂</span>不错</button><button data-mood="高效"><span>🔥</span>高效</button>
+            </div>
+            <label class="field-label">今天完成得最好的一件事</label>
+            <textarea class="review-field" data-field="win" placeholder="哪怕是一件小事，也值得记录……"></textarea>
+            <label class="field-label">今天卡住我的问题</label>
+            <textarea class="review-field" data-field="block" placeholder="知识点、时间安排或状态问题……"></textarea>
+            <label class="field-label">明天最重要的一件事</label>
+            <textarea class="review-field" data-field="tomorrow" placeholder="只写一件最重要的事……"></textarea>
+            <div class="review-save-row"><span id="reviewSaveStatus">内容会自动保存在本机</span><button class="primary-button" id="saveReview">保存今日复盘</button></div>
+          </section>
+          <aside class="review-side">
+            <section class="panel score-card"><span class="mini-label">TODAY'S SCORE</span><h3>今日学习评分</h3><div class="score-number"><strong id="scoreValue">7</strong><span>/ 10</span></div><input id="scoreSlider" type="range" min="1" max="10" value="7"><div class="range-labels"><span>需要调整</span><span>状态极佳</span></div></section>
+            <section class="panel knowledge-card"><div class="panel-head"><div><h3>知识点掌握</h3><p>拖动标记今日自评</p></div></div><div id="knowledgeSliders"></div></section>
+          </aside>
+        </div>
+      </section>
+
+      <section class="page" id="page-memo">
+        <div class="hero-row">
+          <div><p class="eyebrow">QUICK NOTES</p><h2>别让一闪而过的念头溜走。</h2><p class="subtext">知识点、待办、灵感和提醒，都可以暂存在这里。</p></div>
+          <button class="primary-button" id="addMemo"><span>＋</span> 新建便签</button>
+        </div>
+        <div class="memo-toolbar"><div class="search-box">⌕ <input id="memoSearch" placeholder="搜索便签内容"></div><div class="memo-filters"><button class="active" data-memo-filter="all">全部</button><button data-memo-filter="学习">学习</button><button data-memo-filter="提醒">提醒</button><button data-memo-filter="灵感">灵感</button></div></div>
+        <div class="memo-grid" id="memoGrid"></div>
+      </section>
+
+      <section class="page" id="page-english">
+        <div class="hero-row">
+          <div><p class="eyebrow">ENGLISH CORNER</p><h2>与单词重逢，和世界多聊一句。</h2><p class="subtext">选择适合自己的专注时长，让积累慢慢发生。</p></div>
+          <button class="primary-button" id="timerToggle"><span>▶</span> 开始专注</button>
+        </div>
+        <div class="english-grid">
+          <section class="panel timer-card">
+            <div class="timer-top"><div><span class="mini-label">FOCUS TIMER</span><h3>今日英语专注</h3></div><button class="icon-button" id="timerReset" title="重置计时">↻</button></div>
+            <div class="big-timer" id="bigTimer">01:30:00</div>
+            <div class="timer-track"><i id="timerProgress"></i></div>
+            <div class="timer-presets"><button data-minutes="30">30 min</button><button data-minutes="60">60 min</button><button class="active" data-minutes="90">90 min</button></div>
+          </section>
+          <section class="panel english-stat"><span class="stat-icon green">Aa</span><div><small>今日词汇目标</small><strong><span id="wordsLearned">0</span> / 100</strong></div><button class="stepper" id="addWords">＋10</button></section>
+          <section class="panel english-stat"><span class="stat-icon amber">↗</span><div><small>连续学习</small><strong><span id="englishStreak">0</span> 天</strong></div><span class="trend">保持住</span></section>
+          <section class="panel wordbook-card">
+            <div class="panel-head"><div><h3>今日生词本</h3><p>记录阅读中遇到的生词</p></div><span id="wordCount">0 个词</span></div>
+            <form id="wordForm" class="word-form"><input id="wordInput" placeholder="English word" required><input id="meaningInput" placeholder="中文释义" required><button>添加</button></form>
+            <div class="word-list" id="wordList"></div>
+          </section>
+          <section class="panel reading-card">
+            <div class="panel-head"><div><h3>英语学习清单</h3><p>建议按顺序完成</p></div></div>
+            <label><input type="checkbox" data-english-check="words"><span><strong>核心词汇复习</strong><small>建议 45 分钟</small></span></label>
+            <label><input type="checkbox" data-english-check="reading"><span><strong>真题阅读精读</strong><small>建议 30 分钟</small></span></label>
+            <label><input type="checkbox" data-english-check="review"><span><strong>错词回顾</strong><small>建议 15 分钟</small></span></label>
+          </section>
+        </div>
+      </section>
+      <footer class="page-footer"><span>花开有期，奔赴亦有期。</span><small>YAN YOU QI · GROW AT YOUR OWN PACE</small></footer>
+    </main>
+  </div>
+
+  <div class="modal" id="taskModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="taskModal"></div>
+    <div class="modal-card">
+      <div class="modal-head"><div><span class="mini-label">NEW TASK</span><h3>添加学习任务</h3></div><button class="icon-button" data-close-modal="taskModal">×</button></div>
+      <form id="taskForm">
+        <label>任务名称<input id="taskTitle" placeholder="例如：整理本章笔记与错题" required maxlength="60"></label>
+        <div class="form-row"><label>所属科目<select id="taskSubject"></select></label><label>计划时长（小时）<input id="taskDuration" type="number" min="0.1" max="24" step="0.1" value="1" required></label></div>
+        <div class="form-row"><label>时间段<select id="taskPeriod"><option>上午</option><option>下午</option><option>晚上</option><option>早间</option><option>机动</option></select></label><label>优先级<select id="taskPriority"><option value="normal">普通</option><option value="high">重要</option></select></label></div>
+        <div class="modal-actions"><button type="button" class="secondary-button" data-close-modal="taskModal">取消</button><button class="primary-button" type="submit">添加任务</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal" id="memoModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal="memoModal"></div>
+    <div class="modal-card small-modal">
+      <div class="modal-head"><div><span class="mini-label">NEW NOTE</span><h3>新建便签</h3></div><button class="icon-button" data-close-modal="memoModal">×</button></div>
+      <form id="memoForm"><label>便签内容<textarea id="memoContent" placeholder="记下一件事……" required maxlength="300"></textarea></label><label>分类<select id="memoCategory"><option>学习</option><option>提醒</option><option>灵感</option></select></label><div class="modal-actions"><button type="button" class="secondary-button" data-close-modal="memoModal">取消</button><button class="primary-button">保存便签</button></div></form>
+    </div>
+  </div>
+
+  <div class="modal" id="themeModal" aria-hidden="true"><div class="modal-backdrop" data-close-modal="themeModal"></div><div class="modal-card theme-modal"><div class="modal-head"><div><span class="mini-label">A FLOWER FOR YOUR DAY</span><h3>选一朵，陪你生长</h3></div><button class="icon-button" data-close-modal="themeModal" aria-label="关闭">×</button></div><p class="subtext">不同的花期，同样认真生长的你。</p><div id="themeGrid"></div><p class="save-hint">随时切换，选择会自动保存</p></div></div>
+  <div class="modal" id="subjectModal" aria-hidden="true"><div class="modal-backdrop" data-close-modal="subjectModal"></div><div class="modal-card subject-manager"><div class="modal-head"><div><span class="mini-label">YOUR OWN CURRICULUM</span><h3>我的学习科目</h3></div><button class="icon-button" data-close-modal="subjectModal" aria-label="关闭">×</button></div><p class="subtext">编辑名称、颜色与每日目标。归档后不再出现在新增任务中，历史记录仍保留。</p><div id="subjectManagerList"></div><form id="subjectForm"><div class="form-row"><label>新增科目<input id="subjectName" maxlength="24" placeholder="由你定义的科目" required></label><label>每日目标（小时）<input id="subjectGoal" type="number" min="0" max="24" step="0.1" value="1" required></label></div><div class="modal-actions"><button class="primary-button">＋ 创建科目</button></div></form></div></div>
+  <div class="modal" id="goalModal" aria-hidden="true"><div class="modal-backdrop" data-close-modal="goalModal"></div><div class="modal-card"><div class="modal-head"><div><span class="mini-label">A DATE WITH YOUR FUTURE</span><h3>为未来，留一个位置</h3></div><button class="icon-button" data-close-modal="goalModal" aria-label="关闭">×</button></div><form id="goalForm"><div class="form-row"><label>考试日期<input type="date" id="examDateInput"></label><label>备考起始日期<input type="date" id="studyStartInput" required></label></div><label>目标院校<input id="schoolInput" maxlength="60" placeholder="可以先留白，慢慢确定"></label><div class="form-row"><label>报考专业<input id="majorInput" maxlength="60" placeholder="填写你的方向"></label><label>备考阶段<select id="stageInput"><option>按自己的节奏</option><option>探索方向</option><option>基础积累</option><option>强化提升</option><option>冲刺巩固</option></select></label></div><div class="modal-actions"><button class="primary-button">保存我的目标</button></div></form><div class="settings-actions"><button class="text-button" id="exportData">导出数据备份</button><label class="text-button" for="importData">导入备份</label><input id="importData" type="file" accept="application/json,.json" hidden><button class="text-button" id="resetData">重置数据</button></div><p class="save-hint">数据保存在当前浏览器，建议定期导出。</p></div></div>
+  <div class="modal" id="actualModal" aria-hidden="true"><div class="modal-backdrop" data-close-modal="actualModal"></div><div class="modal-card small-modal"><div class="modal-head"><div><span class="mini-label">TIME WELL SPENT</span><h3>记录实际用时</h3></div><button class="icon-button" data-close-modal="actualModal" aria-label="关闭">×</button></div><form id="actualForm"><p id="actualTaskName"></p><label>实际时长（小时）<input id="actualDuration" type="number" min="0" max="24" step="0.1" required></label><p class="subtext">独立于计划时长统计，勾选完成不会自动计入。</p><div class="modal-actions"><button class="primary-button">保存用时</button></div></form></div></div>
+  <div class="toast" id="toast" role="status"></div>
+  <script src="./themes.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
